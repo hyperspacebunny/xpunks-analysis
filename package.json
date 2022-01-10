@@ -1,0 +1,20 @@
+{
+  "name": "xpunks-analysis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run scrape:punks && npm run scrape:xpunks && npm run analyze",
+    "scrape:punks": "node punks.js",
+    "scrape:xpunks": "node xpunks.js",
+    "analyze": "node analyze.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "open": "^8.4.0",
+    "progress": "^2.0.3",
+    "puppeteer": "^13.0.1"
+  }
+}

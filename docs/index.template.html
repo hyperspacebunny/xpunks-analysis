@@ -1,0 +1,58 @@
+<div id="table"></div>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content="Expansion Punks floors analysis" />
+    <meta charset="utf-8" />
+    <title>Expansion Punks floors analysis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="@hyperspacebunny" />
+
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css"
+    />
+  </head>
+
+  <body>
+    <div class="table"></div>
+
+    <script>
+      const data = {{data}};
+      const container = document.getElementById("table");
+      const hot = new Handsontable(container, {
+        data,
+        height: "auto",
+        rowHeaders: true,
+        columnSorting: true,
+        contextMenu: true,
+        manualColumnMove: true,
+        hiddenColumns: true,
+        dropdownMenu: true,
+        filters: true,
+        dropdownMenu: [
+          'filter_by_condition',
+          'filter_operators',
+          'filter_by_value',
+          'filter_action_bar',
+        ],
+        colHeaders: [
+          "Trait",
+          "CP: floor (ETH)",
+          "CP: floor multiplier",
+          "xP: floor (ETH)",
+          "xP: floor multiplier",
+          "xP: CP equivalent floor (ETH)",
+          "xP: Δ floor vs equiv. floor (ETH)",
+          "xP: Δ next cheapest (ETH)",
+        ],
+        licenseKey: "non-commercial-and-evaluation",
+      });
+    </script>
+  </body>
+</html>
