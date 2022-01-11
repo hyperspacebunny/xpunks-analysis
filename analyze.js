@@ -49,7 +49,9 @@ async function main() {
   const template = fs.readFileSync("./docs/index.template.html").toString();
   fs.writeFileSync(
     `./docs/index.html`,
-    template.replace("{{data}}", JSON.stringify(rows))
+    template
+      .replace("{{data}}", JSON.stringify(rows))
+      .replace("{{timestamp}}", new Date().toUTCString())
   );
 }
 

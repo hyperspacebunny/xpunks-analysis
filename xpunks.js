@@ -37,7 +37,7 @@ async function scrapeXPunkFloors() {
         .sort((a, b) => a - b)
     );
 
-    if (prices) {
+    if (prices.length) {
       floors[trait] = prices;
     }
 

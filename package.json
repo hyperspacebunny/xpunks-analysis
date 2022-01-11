@@ -7,6 +7,7 @@
     "start": "npm run scrape:punks && npm run scrape:xpunks && npm run analyze",
     "scrape:punks": "node punks.js",
     "scrape:xpunks": "node xpunks.js",
+    "scrape": "npm run scrape:punks && npm run scrape:xpunks",
     "analyze": "node analyze.js"
   },
   "keywords": [],
