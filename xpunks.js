@@ -8,6 +8,7 @@ async function scrapeXPunkFloors() {
     headless: false,
     defaultViewport: null,
     args: ["--window-size=1920,1080", "--no-sandbox"],
+    userDataDir: "profiles/xpunks",
   });
   const punks = require("./data/punks/latest.json");
   const floors = {};
@@ -27,6 +28,12 @@ async function scrapeXPunkFloors() {
 
     const page = await browser.newPage();
     await page.goto(link);
+    await Promise.race([
+      page.waitForSelector(".AssetsSearchView--assets", false, 60000).catch(),
+      page
+        .waitForSelector(".AssetSearchView--no-results", false, 60000)
+        .catch(),
+    ]);
 
     const prices = await page.evaluate(() =>
       Array.from(
