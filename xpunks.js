@@ -11,7 +11,9 @@ async function scrapeXPunkFloors() {
     userDataDir: "profiles/xpunks",
   });
   const punks = require("./data/punks/latest.json");
-  const floors = {};
+  const floors = fs.existsSync("./data/xpunks/pending.json")
+    ? require("./data/xpunks/pending.json")
+    : {};
   const traitValues = Object.keys(punks);
 
   const bar = new ProgressBar(":bar :current/:total :trait - :prices", {
@@ -19,6 +21,11 @@ async function scrapeXPunkFloors() {
   });
 
   for (const trait of traitValues) {
+    if (Object.keys(floors).includes(trait)) {
+      bar.tick({ trait, prices: floors[trait] });
+      continue;
+    }
+
     const traitType = traitTypes[trait];
     const link = `https://opensea.io/collection/expansionpunks?search[sortAscending]=true&search[sortBy]=PRICE&search[stringTraits][0][name]=${encodeURIComponent(
       traitType
@@ -27,11 +34,13 @@ async function scrapeXPunkFloors() {
     )}&search[toggles][0]=BUY_NOW`;
 
     const page = await browser.newPage();
-    await page.goto(link);
+    await page.goto(link, { timeout: 60000 });
     await Promise.race([
-      page.waitForSelector(".AssetsSearchView--assets", false, 60000).catch(),
       page
-        .waitForSelector(".AssetSearchView--no-results", false, 60000)
+        .waitForSelector(".AssetsSearchView--assets", { timeout: 60000 })
+        .catch(),
+      page
+        .waitForSelector(".AssetSearchView--no-results", { timeout: 60000 })
         .catch(),
     ]);
 
@@ -48,11 +57,17 @@ async function scrapeXPunkFloors() {
       floors[trait] = prices;
     }
 
+    fs.writeFileSync(
+      "./data/xpunks/pending.json",
+      JSON.stringify(floors, null, 2)
+    );
+
     bar.tick({ trait, prices });
   }
 
   await browser.close();
 
+  fs.rmSync("./data/xpunks/pending.json");
   return floors;
 }
 
