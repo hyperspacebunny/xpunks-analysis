@@ -6,7 +6,7 @@ async function main() {
   const xpunkTraitFloor = Object.keys(xpunkFloors).reduce(
     (data, trait) => ({
       ...data,
-      [trait]: Math.min(...xpunkFloors[trait]),
+      [trait]: Math.min(...xpunkFloors[trait].filter((t) => t !== null)),
     }),
     {}
   );
@@ -29,7 +29,11 @@ async function main() {
   const rows = [];
 
   for (const trait of Object.keys(xpunkTraitFloor)) {
-    if (!punkTraitFloor[trait] || !xpunkTraitFloor[trait]) continue;
+    if (!punkTraitFloor[trait] || !xpunkTraitFloor[trait]) {
+      console.log("Skipping", trait);
+      continue;
+    }
+
     const punkMultiplier = punkTraitFloor[trait] / punkCollectionFloor;
     const xpunkMultiplier = xpunkTraitFloor[trait] / xpunkCollectionFloor;
     const expectedFloor = punkMultiplier * xpunkCollectionFloor;
@@ -53,6 +57,8 @@ async function main() {
       .replace("{{data}}", JSON.stringify(rows))
       .replace("{{timestamp}}", new Date().toUTCString())
   );
+
+  console.log("Wrote", rows.length, "rows");
 }
 
 main();
